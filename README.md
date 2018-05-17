@@ -1,6 +1,8 @@
 # audit_client_setup
 
-This is an example wrapper cookbook for how to set attributes necessary for Chef audit and chef-client wrapper cookbooks.  These dependencies are defined in the metadata.rb and then the default recipes for both cookbooks are called after attributes are defined.
+This is an example wrapper cookbook for how to add the functionality of the Audit and Chef-client cookbooks into your runlist, aka node configuration.  
+
+The dependencies for these 2 cookbooks are defined in the metadata.rb.   The default recipes for both cookbooks are then called after attributes are defined.
 
 * It is recommended to run a "berks update" and then "berks upload --ssl-verify false" as best-practice to upload a wrapper cookbook such as this which may have many layers of dependencies
 
@@ -9,9 +11,9 @@ This is an example wrapper cookbook for how to set attributes necessary for Chef
 
 The audit cookbook is the mechanism for how chef-client can automatically executes compliance (i.e. InSpec) profiles against nodes, allowing for continous compliance (vs a one-time remote scan).   Once the audit cookbook is in your runlist for a node, it will always be executed at the end of a chef-client run so that the data in Chef Automate reflects the state of the latest compliance vs the very latest desired state that chef-client has enforced.
 
-In order for this cookbook to properly run a compliance profile in your environment, make sure and update the name of the compliance profile to include your Automate username with admin permissions.
+In order for this cookbook to properly run a compliance profile in your environment, make sure and update the name of the compliance profile in the default.rb to be set to your Automate username with admin permissions.
 
-   * For example, my Automate user is chefadmin and the profile I want is linux-baseline, thus "compliance: chefadmin/linux-baseline" that is coded in this cookbook.   
+   * For example, my Automate user is chefadmin and the profile I want is linux-baseline, thus "compliance: chefadmin/linux-baseline" that is the value that is coded in this cookbook.   Unless you happen to have a "chefadmin" user, this will not work.
    
 In this example only one profile is being set depending on the type of OS, but multiple profiles can be defined and run against a node.
 
@@ -19,7 +21,7 @@ Also note: I have also already downloaded the windows-baseline and linux-baselin
 
 
 
-#### Documentation on audit cookbook functionality, and all available attributes
+#### Documentation on audit cookbook functionality, and all available attributes with default value information
 https://supermarket.chef.io/cookbooks/audit
 
 ## chef-client
@@ -28,10 +30,10 @@ The chef-client cookbook is required to be part of a node's runlist in order to 
 ex:
   * knife bootstrap NODEIP --sudo -x USER -i KEY --node-ssl-verify-mode none -N CHEFNODELABEL -r 'recipe[audit_client_setup]'
 
-The attributes as defined in this cookbook set the chef-client to checkin every 15 minutes both either Windows of Linux.  In the case of the chef-client cookbook, the attributes are different per platform. 
+The attributes as defined in this cookbook set the chef-client to checkin every 15 minutes both either Windows of Linux.  In the case of the chef-client cookbook, the attributes that need to be set to trigger this Chef capability are different per platform. 
 
 
-#### Documentation on chef-client cookbook functionality, and all available attributes
+#### Documentation on chef-client cookbook functionality, and all available attributes with default value information
 https://supermarket.chef.io/cookbooks/chef-client
 
 
